@@ -1,1 +1,47 @@
-<p>login works!</p>
+<app-container>
+  <div class="card_login--container">
+    <mat-card class="card_container" appearance="outlined">
+      <mat-card-header class="card_header--container">
+        <mat-card-title class="card_header--title"
+          >Task Manager Login</mat-card-title
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <form action="">
+          <p>
+            <mat-form-field appearance="outline">
+              <mat-label>Fill form field</mat-label>
+              <input matInput placeholder="Placeholder" />
+              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+              <!-- <mat-hint>Hint</mat-hint> -->
+            </mat-form-field>
+          </p>
+
+          <p>
+            <mat-form-field>
+              <mat-label>Enter your password</mat-label>
+              <input matInput [type]="hide() ? 'password' : 'text'" />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="clickEvent($event)"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide()"
+              >
+                <mat-icon>{{
+                  hide() ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+          </p>
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button class="card_actions--login-button">
+          Login
+        </button>
+        <button mat-button color="error">Cancel</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</app-container>

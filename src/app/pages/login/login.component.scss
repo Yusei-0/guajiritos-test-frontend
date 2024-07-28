@@ -1,0 +1,25 @@
+.card_container {
+  width: 360px;
+  margin: 10px;
+}
+
+.card_login--container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.card_header--container{
+  justify-content: center;
+  // margin-bottom: 15px;
+}
+
+.card_actions--login-button{
+  margin: 0 8px;
+}
+
+// mat-form-field{
+//   width: 100%;
+//   margin-bottom: 20px;
+// }
