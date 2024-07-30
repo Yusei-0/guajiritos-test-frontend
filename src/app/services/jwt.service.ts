@@ -13,10 +13,8 @@ export class JwtService {
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isRefreshing = false;
 
-  setToken(token: string, refreshToken?: string) {
+  setToken(token: string) {
     localStorage.setItem('token', token);
-
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
   }
 
   removeToken() {

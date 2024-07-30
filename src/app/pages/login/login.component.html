@@ -9,19 +9,27 @@
           <tm-title> Welcome back. Sign into your account </tm-title>
         </mat-card-header>
         <mat-card-content>
-          <form action="">
+          <form [formGroup]="formLogin" (submit)="login()">
             <mat-form-field
               appearance="outline"
               class="card_form--input card_form--input-name"
             >
               <mat-label>Email</mat-label>
-              <input matInput placeholder="user@example.com" />
+              <input
+                matInput
+                placeholder="user@example.com"
+                formControlName="email"
+              />
               <mat-icon matSuffix>mail</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="card_form--input">
               <mat-label>Password</mat-label>
-              <input matInput [type]="hidePassword() ? 'password' : 'text'" />
+              <input
+                matInput
+                [type]="hidePassword() ? 'password' : 'text'"
+                formControlName="password"
+              />
               <button
                 type="button"
                 mat-icon-button
@@ -36,7 +44,14 @@
           </form>
         </mat-card-content>
         <mat-card-actions class="card_actions--container">
-          <wide-button class="card_actions--login-button"> Login </wide-button>
+          <button
+            mat-flat-button
+            class="card_actions--login-button"
+            (click)="login()"
+            type="submit"
+          >
+            Login
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>

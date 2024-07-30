@@ -11,15 +11,8 @@ export class UserService {
 
   constructor() {}
 
-  setAuthUser(authUser: AuthUser) {
-    const user: User = {
-      id: authUser.user.id,
-      name: authUser.user.name,
-      email: authUser.user.email,
-      role: authUser.user.role,
-      password: '',
-    };
-    this.userSubject.next(user);
+  setAuthUser(authUser: User) {
+    this.userSubject.next(authUser);
   }
 
   getUser(): User {

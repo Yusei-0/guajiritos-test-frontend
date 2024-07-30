@@ -89,8 +89,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log('Submit');
-
     if (!this.validateForm()) return;
 
     const userLoginData: LoginUserDTO = {
@@ -99,11 +97,12 @@ export class LoginComponent implements OnInit {
     };
 
     this.authService.login(userLoginData).subscribe((response) => {
-      this.jwtService.setToken(response.token, response.refreshToken);
-      this.userService.setAuthUser(response);
+      this.jwtService.setToken(response.accessToken);
+      this.userService.setAuthUser(response.user);
 
       // this.toastr.success('Login successfully!');
-      this.router.navigate(['/']);
+      if (this.authService.isLogin())
+        this.router.navigate([APP_ROUTES.Private.Admin]);
     });
   }
   initilizeForm() {

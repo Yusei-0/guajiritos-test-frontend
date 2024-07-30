@@ -15,8 +15,7 @@ export interface LoginUserDTO {
 }
 
 export interface AuthUser {
-  token: string;
-  refreshToken: string;
+  accessToken: string;
   user: User;
 }
 

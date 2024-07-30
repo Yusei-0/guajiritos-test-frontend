@@ -36,7 +36,7 @@ export class AuthService {
 
   login(userLogin: LoginUserDTO) {
     return this.http
-      .post<AuthUser>(environment.urlServer + '/auth/login', userLogin)
+      .post<AuthUser>(environment.urlServer + '/signin', userLogin)
       .pipe(retry(3));
   }
 
