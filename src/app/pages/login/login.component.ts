@@ -20,7 +20,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { APP_ROUTES, LoginUserDTO } from '@/models';
+import { APP_ROUTES, LoginUserDTO, MESSAGES } from '@/models';
 import { AuthService, JwtService, UserService } from '@/services';
 import { AppTitleComponent, WideButtonComponent } from '@/components';
 
@@ -63,16 +63,15 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
   });
 
+  APP_MESSAGES = MESSAGES;
   hidePassword = signal(true);
 
   showOrHidePassword(event: MouseEvent) {
-    this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
+    this.hidePassword.set(!this.hidePassword());
   }
 
-  ngOnInit(): void {
-    this.initilizeForm();
-  }
+  ngOnInit(): void {}
 
   backHome() {
     this.router.navigate([APP_ROUTES.Public.Home]);

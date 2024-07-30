@@ -9,6 +9,11 @@ import {
   withFetch,
   withInterceptors,
 } from '@angular/common/http';
+import {
+  authInterceptor,
+  jwtInterceptor,
+  loaderInterceptor,
+} from './interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +21,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([loaderInterceptor, jwtInterceptor, authInterceptor])
+    ),
   ],
 };

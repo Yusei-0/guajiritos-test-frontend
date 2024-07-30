@@ -21,6 +21,15 @@
                 formControlName="email"
               />
               <mat-icon matSuffix>mail</mat-icon>
+              @if (formLogin.get('email')?.hasError('required')) {
+              <mat-error>
+                {{ APP_MESSAGES.FORM_ERRORS.email_required }}
+              </mat-error>
+              } @if (formLogin.get('email')?.hasError('email')) {
+              <mat-error>
+                {{ APP_MESSAGES.FORM_ERRORS.email_input }}
+              </mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="card_form--input">
@@ -40,6 +49,11 @@
                   hidePassword() ? "visibility_off" : "visibility"
                 }}</mat-icon>
               </button>
+              @if (formLogin.get('password')?.hasError('required')) {
+              <mat-error>
+                {{ APP_MESSAGES.FORM_ERRORS.required }}
+              </mat-error>
+              }
             </mat-form-field>
           </form>
         </mat-card-content>
