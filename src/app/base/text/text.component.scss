@@ -1,0 +1,40 @@
+p {
+  &.default {
+    font-size: 1rem;
+    color: black;
+  }
+
+  &.caption {
+    font-size: 0.75rem;
+    color: gray;
+  }
+
+  &.label {
+    font-size: 0.875rem;
+    color: black;
+    font-weight: bold;
+  }
+
+  &.hint {
+    font-size: 0.75rem;
+    color: blue;
+  }
+
+  &.error {
+    font-size: 0.875rem;
+    color: red;
+    font-weight: bold;
+  }
+
+  &.warning {
+    font-size: 0.875rem;
+    color: orange;
+    font-weight: bold;
+  }
+
+  &.info {
+    font-size: 0.875rem;
+    color: green;
+    font-weight: bold;
+  }
+}

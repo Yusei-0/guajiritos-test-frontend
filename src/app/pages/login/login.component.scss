@@ -1,25 +1,64 @@
-.card_container {
-  width: 360px;
-  margin: 10px;
+.login_page--container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 100vh;
 }
 
-.card_login--container{
+.login_page--img{
+  grid-area: 1 / 2 / 2 / 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(125,151,244);
+  background: linear-gradient(100deg, rgba(125,151,244,1) 10%, rgba(190,207,251,1) 83%);
+}
+
+.login_page--card-container{
+  height: 100vh;
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.login_page--title-container{
+  display: flex;
+  justify-content: center;
+}
+
+.card-container{
   display: flex;
   justify-content: center;
   align-items: center;
   height: 80vh;
 }
 
+.login_page--card {
+  width: 360px;
+  margin: 10px;
+
+}
+
 .card_header--container{
   justify-content: center;
-  // margin-bottom: 15px;
+  margin-bottom: 40px;
+}
+
+.card_form--input{
+  width: 100%;
+}
+
+.card_form--input-name {
+  // margin-bottom: 20px;
+}
+
+.card_actions--container{
+  margin-bottom: 10px;
 }
 
 .card_actions--login-button{
+  width: 100%;
   margin: 0 8px;
 }
 
-// mat-form-field{
-//   width: 100%;
-//   margin-bottom: 20px;
-// }
+

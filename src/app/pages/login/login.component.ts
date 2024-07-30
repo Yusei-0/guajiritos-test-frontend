@@ -1,4 +1,4 @@
-import { ContainerComponent } from '@/base';
+import { ContainerComponent, TextComponent, TitleComponent } from '@/base';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +6,8 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+
+import { NgOptimizedImage } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,13 +18,11 @@ import {
   ReactiveFormsModule,
   Validators,
   FormBuilder,
-  FormGroup,
 } from '@angular/forms';
-import { merge } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { APP_ROUTES, LoginUserDTO } from '@/models';
 import { AuthService, JwtService, UserService } from '@/services';
-import { HttpClient } from '@angular/common/http';
+import { AppTitleComponent, WideButtonComponent } from '@/components';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +31,7 @@ import { HttpClient } from '@angular/common/http';
     // Core
     ReactiveFormsModule,
     RouterModule,
+    NgOptimizedImage,
 
     //Material
     MatCardModule,
@@ -41,6 +42,10 @@ import { HttpClient } from '@angular/common/http';
 
     // Components
     ContainerComponent,
+    WideButtonComponent,
+    TitleComponent,
+    TextComponent,
+    AppTitleComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -58,9 +63,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
   });
 
-  hide = signal(true);
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
+  hidePassword = signal(true);
+
+  showOrHidePassword(event: MouseEvent) {
+    this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
   }
 

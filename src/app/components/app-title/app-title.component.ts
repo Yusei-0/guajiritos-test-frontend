@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'tm-title',
+  selector: 'tm-app-title',
   standalone: true,
   imports: [],
-  templateUrl: './title.component.html',
-  styleUrl: './title.component.scss',
+  templateUrl: './app-title.component.html',
+  styleUrl: './app-title.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TitleComponent {}
+export class AppTitleComponent {}

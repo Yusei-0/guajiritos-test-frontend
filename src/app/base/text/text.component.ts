@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 export type TextType =
@@ -7,16 +8,17 @@ export type TextType =
   | 'hint'
   | 'error'
   | 'warning'
-  | 'info';
+  | 'info'
+  | 'title';
 
 @Component({
-  selector: 'app-text',
+  selector: 'tm-text',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './text.component.html',
   styleUrl: './text.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextComponent {
-  type = input();
+  type = input<TextType>('default');
 }

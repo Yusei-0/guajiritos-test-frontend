@@ -1,47 +1,53 @@
-<app-container>
-  <div class="card_login--container">
-    <mat-card class="card_container" appearance="outlined">
-      <mat-card-header class="card_header--container">
-        <mat-card-title class="card_header--title"
-          >Task Manager Login</mat-card-title
-        >
-      </mat-card-header>
-      <mat-card-content>
-        <form action="">
-          <p>
-            <mat-form-field appearance="outline">
-              <mat-label>Fill form field</mat-label>
-              <input matInput placeholder="Placeholder" />
-              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-              <!-- <mat-hint>Hint</mat-hint> -->
+<div class="login_page--container">
+  <div class="login_page--card-container">
+    <div class="login_page--title-container">
+      <tm-app-title class="login_page--title-app"></tm-app-title>
+    </div>
+    <div class="card-container">
+      <mat-card class="login_page--card">
+        <mat-card-header class="card_header--container">
+          <tm-title> Welcome back. Sign into your account </tm-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form action="">
+            <mat-form-field
+              appearance="outline"
+              class="card_form--input card_form--input-name"
+            >
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="user@example.com" />
+              <mat-icon matSuffix>mail</mat-icon>
             </mat-form-field>
-          </p>
 
-          <p>
-            <mat-form-field>
-              <mat-label>Enter your password</mat-label>
-              <input matInput [type]="hide() ? 'password' : 'text'" />
+            <mat-form-field appearance="outline" class="card_form--input">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hidePassword() ? 'password' : 'text'" />
               <button
+                type="button"
                 mat-icon-button
                 matSuffix
-                (click)="clickEvent($event)"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide()"
+                (click)="showOrHidePassword($event)"
               >
                 <mat-icon>{{
-                  hide() ? "visibility_off" : "visibility"
+                  hidePassword() ? "visibility_off" : "visibility"
                 }}</mat-icon>
               </button>
             </mat-form-field>
-          </p>
-        </form>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-flat-button class="card_actions--login-button">
-          Login
-        </button>
-        <button mat-button color="error">Cancel</button>
-      </mat-card-actions>
-    </mat-card>
+          </form>
+        </mat-card-content>
+        <mat-card-actions class="card_actions--container">
+          <wide-button class="card_actions--login-button"> Login </wide-button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
-</app-container>
+  <div class="login_page--img">
+    <img
+      ngSrc="/img/login.png"
+      alt="show tow persons with a task manager in the background"
+      priority
+      width="700"
+      height="700"
+    />
+  </div>
+</div>

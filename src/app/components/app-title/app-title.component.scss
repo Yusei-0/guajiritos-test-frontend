@@ -1,0 +1,14 @@
+.app-title{
+font-size: 1.5rem;
+height: 36px;
+display: flex;
+width: 180px;
+background: linear-gradient(90deg, rgba(87,107,237,1) 25%, rgba(254,117,147,1) 75%);
+-webkit-background-clip: text;
+color: transparent;
+font-family: "Edu AU VIC WA NT Hand", cursive;
+font-optical-sizing: auto;
+font-weight: 700;
+font-style: normal;
+margin: 15px;
+}
