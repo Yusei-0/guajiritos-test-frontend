@@ -4,6 +4,8 @@
 
 .sidenav {
   width: 200px;
+  //border shadow
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
 }
 
 .sidenav .mat-toolbar {
@@ -14,4 +16,10 @@
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.active-route{
+  color: #000;
+  font-weight: bold;
+  background-color: rgba(87, 151, 254, 0.20);
 }
