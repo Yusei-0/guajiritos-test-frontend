@@ -22,12 +22,6 @@ export class AuthService {
     return this.http
       .post<AuthUser>(environment.urlServer + '/auth/register', newUser)
       .pipe(retry(3));
-    // .subscribe((res) => {
-    //   const { token }: any = res;
-    //   this.jwt.setToken(token);
-    // },(error:any)=>{
-    //   console.log(error);
-    // });
   }
 
   isLogin() {

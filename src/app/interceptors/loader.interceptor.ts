@@ -1,32 +1,23 @@
-import { FlightService, LoaderService } from '@/services';
+import { LoaderService } from '@/services';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, finalize, throwError } from 'rxjs';
 
 export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
-
   const loader = inject(LoaderService);
-  const flightService = inject(FlightService);
-  let isPhotoPending = false;
 
-  const suscription  = flightService.pendingPhoto$.subscribe(
-    res => {
-      isPhotoPending = res;
-    }
-  )
+  loader.loaderCounter += 1;
 
-
-  if(!isPhotoPending)
-  loader.showLoader();
+  if (loader.loaderCounter > 0) loader.showLoader();
 
   return next(req).pipe(
-       catchError(error => {
-       return throwError(error);
+    catchError((error) => {
+      return throwError(error);
     }),
-      finalize(() => {
-     loader.hideLoader();
-     flightService.updatePhotoPendingData(false)
-     suscription.unsubscribe();
+    finalize(() => {
+      loader.loaderCounter -= 1;
+
+      if (loader.loaderCounter === 0) loader.hideLoader();
     })
   );
 };

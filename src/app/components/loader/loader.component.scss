@@ -1,0 +1,12 @@
+.loader-wraper {
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  padding-top: 300px;
+  background-color: rgba(217, 217, 217, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+}

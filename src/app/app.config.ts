@@ -10,7 +10,7 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import {
-  authInterceptor,
+  errorInterceptor,
   jwtInterceptor,
   loaderInterceptor,
 } from './interceptors';
@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(
       withFetch(),
-      withInterceptors([loaderInterceptor, jwtInterceptor, authInterceptor])
+      withInterceptors([loaderInterceptor, jwtInterceptor, errorInterceptor])
     ),
   ],
 };
