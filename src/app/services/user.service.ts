@@ -1,11 +1,15 @@
 import { AuthUser, User, USER_DEFAULT } from '@/models';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  http = inject(HttpClient);
+
   private userSubject = new BehaviorSubject<User>(USER_DEFAULT);
   user$ = this.userSubject.asObservable();
 
@@ -15,7 +19,11 @@ export class UserService {
     this.userSubject.next(authUser);
   }
 
-  getUser(): User {
+  getUserAuthenticated(): User {
     return this.userSubject.value;
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(environment.urlServer + '/users');
   }
 }
