@@ -19,9 +19,10 @@ export class AuthService {
 
   register(newUser: CreateUserDto) {
     console.log(newUser);
-    return this.http
-      .post<AuthUser>(environment.urlServer + '/auth/register', newUser)
-      .pipe(retry(3));
+    return this.http.post<AuthUser>(
+      environment.urlServer + '/auth/register',
+      newUser
+    );
   }
 
   isLogin() {
@@ -29,21 +30,14 @@ export class AuthService {
   }
 
   login(userLogin: LoginUserDTO) {
-    return this.http
-      .post<AuthUser>(environment.urlServer + '/signin', userLogin)
-      .pipe(retry(3));
+    return this.http.post<AuthUser>(
+      environment.urlServer + '/signin',
+      userLogin
+    );
   }
 
   logout() {
     this.jwt.removeToken();
     this.router.navigate(['/login']);
-  }
-
-  refreshToken() {
-    const refreshToken = this.jwt.getRefreshToken();
-    return this.http.post<TokensAuthDto>(
-      environment.urlServer + '/auth/refresh',
-      { refreshToken }
-    );
   }
 }

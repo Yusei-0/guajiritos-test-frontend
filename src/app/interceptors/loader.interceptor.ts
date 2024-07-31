@@ -11,9 +11,9 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   if (loader.loaderCounter > 0) loader.showLoader();
 
   return next(req).pipe(
-    catchError((error) => {
-      return throwError(error);
-    }),
+    // catchError((error) => {
+    //   return throwError(error);
+    // }),
     finalize(() => {
       loader.loaderCounter -= 1;
 
