@@ -5,7 +5,7 @@ import { JwtService } from './jwt.service';
 import { retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthUser, CreateUserDto, LoginUserDTO } from '@/models/dto';
-import { TokensAuthDto } from '@/models';
+import { APP_ROUTES, TokensAuthDto } from '@/models';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +38,6 @@ export class AuthService {
 
   logout() {
     this.jwt.removeToken();
-    this.router.navigate(['/login']);
+    this.router.navigate([APP_ROUTES.Public.Login]);
   }
 }

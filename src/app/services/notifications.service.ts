@@ -11,6 +11,7 @@ import {
 export class NotificationsService {
   private horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   private verticalPosition: MatSnackBarVerticalPosition = 'top';
+  private durationInMinutes: number = 5;
 
   snackBar = inject(MatSnackBar);
 
@@ -18,6 +19,7 @@ export class NotificationsService {
     this.snackBar.open(message, 'Dismiss', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
+      duration: this.durationInMinutes * 1000,
     });
   }
 }

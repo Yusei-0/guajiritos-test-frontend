@@ -10,28 +10,32 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class JwtService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  isRefreshing = false;
-
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
   setToken(token: string) {
-    localStorage.setItem('token', token);
+    if (this.isBrowser()) {
+      localStorage.setItem('token', token);
+    }
   }
 
   removeToken() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
+    if (this.isBrowser()) {
+      localStorage.removeItem('token');
+    }
   }
 
-  getToken() {
-    return localStorage.getItem('token') || '';
-  }
-
-  getRefreshToken(): string {
-    return localStorage.getItem('refreshToken') || '';
+  getToken(): string {
+    if (this.isBrowser()) {
+      return localStorage.getItem('token') || '';
+    }
+    return '';
   }
 
   setRefreshToken(refreshToken: string) {
-    localStorage.setItem('refreshToken', refreshToken);
+    if (this.isBrowser()) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
   }
 
   addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
@@ -40,9 +44,5 @@ export class JwtService {
         Authorization: `Bearer ${token}`,
       },
     });
-  }
-
-  get refreshToken$(): Observable<any> {
-    return this.refreshTokenSubject.asObservable();
   }
 }
