@@ -32,16 +32,16 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
         <td mat-cell *matCellDef="let row">
-          <button mat-icon-button color="primary">
-            <mat-icon>visibility</mat-icon>
-          </button>
-          <button mat-icon-button (click)="editUser(row)">
+          <button
+            mat-icon-button
+            (click)="openUpdateUserDialog(row)"
+            color="primary"
+          >
             <mat-icon>edit</mat-icon>
           </button>
           <button
             mat-icon-button
-            (click)="editUser(row)"
-            color="danger"
+            (click)="deleteUser(row)"
             class="user_list--table-button-delete"
           >
             <mat-icon>delete</mat-icon>
@@ -65,5 +65,7 @@
       aria-label="Select page of users"
     ></mat-paginator>
   </div>
-  <tm-float-add-button>person_add</tm-float-add-button>
+  <tm-float-add-button (click)="openCreateUserDialog()" icon="person_add">
+    Add User
+  </tm-float-add-button>
 </div>

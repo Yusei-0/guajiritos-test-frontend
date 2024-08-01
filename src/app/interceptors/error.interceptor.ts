@@ -22,8 +22,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Lógica adicional para errores específicos
         switch (error.status) {
           case 400:
-            errorMessage = 'Bad Request: Please check your input.';
-            console.error('Bad Request: Please check your input.');
+            errorMessage =
+              error.error || 'Bad Request: Please check your input.';
+            console.error('Bad Request:', errorMessage);
             break;
           case 401:
             errorMessage = 'Unauthorized: Please log in again.';

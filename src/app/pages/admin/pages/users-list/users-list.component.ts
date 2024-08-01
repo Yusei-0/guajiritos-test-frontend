@@ -1,4 +1,4 @@
-import { User } from '@/models';
+import { CreateUserDTO, User } from '@/models';
 import { UserService } from '@/services';
 import { JsonPipe } from '@angular/common';
 import {
@@ -19,7 +19,14 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { FloatAddButtonComponent } from '../../components';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  AddUserDialogComponent,
+  CloseUpdateUserDialogData,
+  DeleteDialogComponent,
+  FloatAddButtonComponent,
+  UpdateUserDialogComponent,
+} from '../../components/';
 
 @Component({
   selector: 'tm-users-list',
@@ -45,11 +52,11 @@ import { FloatAddButtonComponent } from '../../components';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
-  editUser(_t70: any) {}
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   userService = inject(UserService);
+  dialog = inject(MatDialog);
 
   userSuscription!: Subscription;
 
@@ -74,6 +81,53 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userSuscription = this.userService.getAllUsers().subscribe((users) => {
       this.data.set(users);
       this.usersDataSource.set(new MatTableDataSource(users));
+    });
+  }
+
+  deleteUser(user: User) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        name: user.name,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      if (res === true)
+        this.userService.deleteUser(user.id).subscribe((res) => {
+          console.log('res delete:', res);
+          this.getUserData();
+        });
+    });
+  }
+
+  openCreateUserDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result: CreateUserDTO) => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        this.userService.createNewUser(result).subscribe((user) => {
+          this.getUserData();
+        });
+      }
+    });
+  }
+  openUpdateUserDialog(user: User): void {
+    const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
+      data: {
+        user,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: CloseUpdateUserDialogData) => {
+      console.log('The dialog was closed');
+      // if (result !== undefined) {
+      //   // this.userService.createNewUser(result).subscribe((user) => {
+      //   //   this.getUserData();
+      //   // });
+      // }
     });
   }
 

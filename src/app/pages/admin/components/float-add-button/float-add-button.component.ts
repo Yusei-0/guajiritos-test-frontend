@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -10,4 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './float-add-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FloatAddButtonComponent {}
+export class FloatAddButtonComponent {
+  icon = input.required<string>();
+}

@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { JwtService } from './jwt.service';
 import { retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthUser, CreateUserDto, LoginUserDTO } from '@/models/dto';
+import { AuthUser, CreateUserDTO, LoginUserDTO } from '@/models/dto';
 import { APP_ROUTES, TokensAuthDto } from '@/models';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class AuthService {
 
   constructor() {}
 
-  register(newUser: CreateUserDto) {
+  register(newUser: CreateUserDTO) {
     console.log(newUser);
     return this.http.post<AuthUser>(
       environment.urlServer + '/auth/register',

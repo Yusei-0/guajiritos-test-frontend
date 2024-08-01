@@ -1,4 +1,4 @@
-import { AuthUser, User, USER_DEFAULT } from '@/models';
+import { AuthUser, CreateUserDTO, User, USER_DEFAULT } from '@/models';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -26,4 +26,16 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(environment.urlServer + '/users');
   }
+
+  createNewUser(newUser: CreateUserDTO): Observable<User> {
+    return this.http.post<User>(environment.urlServer + '/signup', {
+      ...newUser,
+    });
+  }
+
+  deleteUser(id: number): Observable<User> {
+    return this.http.delete<User>(environment.urlServer + '/users/' + id);
+  }
+
+  updateUser(user: User) {}
 }

@@ -1,12 +1,11 @@
+import { Role } from '../types';
 import { User } from '../user.model';
-
-export interface GetUserDTO {
-  id: number;
-}
 
 export interface CreateUserDTO {
   email: string;
   password: string;
+  name: string;
+  role: Role;
 }
 
 export interface LoginUserDTO {
@@ -17,9 +16,4 @@ export interface LoginUserDTO {
 export interface AuthUser {
   accessToken: string;
   user: User;
-}
-
-export interface CreateUserDto {
-  email: string;
-  password: string;
 }
