@@ -12,6 +12,7 @@ import { AppTitleComponent } from '@/components';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ADMIN_ROUTES } from './models/routes-admin.model';
 import { AuthService } from '@/services';
+import { JustForAdminDirective } from '@/core';
 
 @Component({
   selector: 'app-admin',
@@ -34,6 +35,9 @@ import { AuthService } from '@/services';
 
     //components
     AppTitleComponent,
+
+    //Others
+    JustForAdminDirective,
   ],
 })
 export class AdminComponent {

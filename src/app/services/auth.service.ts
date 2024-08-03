@@ -6,6 +6,7 @@ import { retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthUser, CreateUserDTO, LoginUserDTO } from '@/models/dto';
 import { APP_ROUTES, TokensAuthDto } from '@/models';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class AuthService {
   http = inject(HttpClient);
   jwt = inject(JwtService);
   router = inject(Router);
+  userService = inject(UserService);
 
   constructor() {}
 
@@ -38,6 +40,7 @@ export class AuthService {
 
   logout() {
     this.jwt.removeToken();
+    this.userService.clearUserFromLocalStorage();
     this.router.navigate([APP_ROUTES.Public.Login]);
   }
 }

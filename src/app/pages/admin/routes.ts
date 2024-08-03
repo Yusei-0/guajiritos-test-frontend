@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { ADMIN_ROUTES } from './models';
+import { justAdminGuard } from './guards';
 
 export const Routes: Route[] = [
   {
@@ -22,6 +23,7 @@ export const Routes: Route[] = [
         path: ADMIN_ROUTES.USERS_LIST,
         loadComponent: () =>
           import('./pages/').then((m) => m.UsersListComponent),
+        canActivate: [justAdminGuard],
       },
     ],
   },

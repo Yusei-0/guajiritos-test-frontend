@@ -1,10 +1,9 @@
 import { passwordConfirmationValidator } from '@/helpers';
-import { CreateUserDTO, MESSAGES, RoleOptions, ROLES, User } from '@/models';
+import { CreateUserDTO, MESSAGES, ROLES, UpdateUserDto } from '@/models';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  model,
   OnInit,
 } from '@angular/core';
 import {
@@ -26,15 +25,10 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-
-export interface UpdateUserDialogData {
-  user: User;
-}
-
-export interface CloseUpdateUserDialogData {
-  ther_is_password: boolean;
-  updated_user: CreateUserDTO;
-}
+import {
+  CloseUpdateUserDialogData,
+  UpdateUserDialogData,
+} from '../../models/update-user-dialog.model';
 
 @Component({
   selector: 'tm-update-user-dialog',
@@ -91,20 +85,31 @@ export class UpdateUserDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('submit');
-
     if (!this.checkFormValid()) return;
 
-    const userForSubmit: CreateUserDTO = {
+    let resCloseUpdateDialog: CloseUpdateUserDialogData;
+
+    const userForSubmit: UpdateUserDto = {
       name: this.form.value.name!,
       email: this.form.value.email!,
-      password: this.form.value.password!,
       role: this.form.value.role!,
     };
 
-    console.log('CLOse');
+    if (this.form.value.password) {
+      userForSubmit.password = this.form.value.password;
 
-    this.dialogRef.close(userForSubmit);
+      resCloseUpdateDialog = {
+        ther_is_password: true,
+        updated_user: userForSubmit,
+      };
+    } else {
+      resCloseUpdateDialog = {
+        ther_is_password: false,
+        updated_user: userForSubmit,
+      };
+    }
+
+    this.dialogRef.close(resCloseUpdateDialog);
   }
 
   onNoClick(): void {

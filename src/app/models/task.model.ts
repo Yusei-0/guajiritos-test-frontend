@@ -5,8 +5,7 @@ export interface Task {
   title: string;
   description: string;
   status: TaskStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  userId: number;
 }
 
 export const TASK_DEFAULT: Task = {
@@ -14,6 +13,5 @@ export const TASK_DEFAULT: Task = {
   title: '',
   description: '',
   status: TaskStatusOptions.TODO,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  userId: 0,
 };

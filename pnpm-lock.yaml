@@ -44,6 +44,12 @@ dependencies:
   express:
     specifier: ^4.18.2
     version: 4.19.2
+  mat-select-filter:
+    specifier: ^2.4.1
+    version: 2.4.1(@angular/common@18.0.5)(@angular/core@18.1.1)
+  ngx-mat-select-search:
+    specifier: ^7.0.6
+    version: 7.0.6(@angular/material@18.1.1)
   rxjs:
     specifier: ~7.8.0
     version: 7.8.1
@@ -6204,6 +6210,17 @@ packages:
       - supports-color
     dev: true
 
+  /mat-select-filter@2.4.1(@angular/common@18.0.5)(@angular/core@18.1.1):
+    resolution: {integrity: sha512-8MhkuFlWNACOGdR2F/YskeeZ17U1ym4dXIfyfewotjMO9KZ+t9M++WKUD6pZ6n/0EpSx24CvsEeTL79eOtiJiQ==}
+    peerDependencies:
+      '@angular/common': '>=9.0.0 <14.0.0'
+      '@angular/core': '>=9.0.0 <14.0.0'
+    dependencies:
+      '@angular/common': 18.0.5(@angular/core@18.1.1)(rxjs@7.8.1)
+      '@angular/core': 18.1.1(rxjs@7.8.1)(zone.js@0.14.8)
+      tslib: 2.6.3
+    dev: false
+
   /media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
@@ -6455,6 +6472,15 @@ packages:
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
+
+  /ngx-mat-select-search@7.0.6(@angular/material@18.1.1):
+    resolution: {integrity: sha512-aKzWknt439ZoOaSz+KnP8lPDeBBHmcEl0fRI80wcKiRqhlk90NW//6u81ZlwBsxdvQ6hB6NCXbRLUNV8HjdETg==}
+    peerDependencies:
+      '@angular/material': ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@angular/material': 18.1.1(@angular/animations@18.0.5)(@angular/cdk@18.1.1)(@angular/common@18.0.5)(@angular/core@18.1.1)(@angular/forms@18.1.1)(@angular/platform-browser@18.1.1)(rxjs@7.8.1)
+      tslib: 2.6.3
+    dev: false
 
   /nice-napi@1.0.2:
     resolution: {integrity: sha512-px/KnJAJZf5RuBGcfD+Sp2pAKq0ytz8j+1NehvgIGFkvtvFrDM3T8E4x/JJODXK9WZow8RRGrbA9QQ3hs+pDhA==}

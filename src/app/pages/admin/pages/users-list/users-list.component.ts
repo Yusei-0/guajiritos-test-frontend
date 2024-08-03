@@ -22,11 +22,12 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AddUserDialogComponent,
-  CloseUpdateUserDialogData,
   DeleteDialogComponent,
   FloatAddButtonComponent,
   UpdateUserDialogComponent,
 } from '../../components/';
+import { CloseUpdateUserDialogData } from '../../models/update-user-dialog.model';
+import { UpdateUserDto } from '../../../../models/dto/user.dto';
 
 @Component({
   selector: 'tm-users-list',
@@ -68,10 +69,7 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getUserData();
   }
 
-  ngAfterViewInit(): void {
-    this.usersDataSource().paginator = this.paginator;
-    this.usersDataSource().sort = this.sort;
-  }
+  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
     this.userSuscription.unsubscribe();
@@ -81,6 +79,15 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userSuscription = this.userService.getAllUsers().subscribe((users) => {
       this.data.set(users);
       this.usersDataSource.set(new MatTableDataSource(users));
+      this.usersDataSource.update((x) => {
+        x.paginator = this.paginator;
+        return x;
+      });
+
+      this.usersDataSource.update((x) => {
+        x.sort = this.sort;
+        return x;
+      });
     });
   }
 
@@ -122,12 +129,30 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result: CloseUpdateUserDialogData) => {
-      console.log('The dialog was closed');
-      // if (result !== undefined) {
-      //   // this.userService.createNewUser(result).subscribe((user) => {
-      //   //   this.getUserData();
-      //   // });
-      // }
+      if (result !== undefined) {
+        let userForUpdate: UpdateUserDto;
+        const { ther_is_password, updated_user } = result;
+
+        userForUpdate = {
+          name: updated_user.name,
+          email: updated_user.email,
+          role: updated_user.role,
+        };
+
+        if (ther_is_password && updated_user.password) {
+          this.userService.deleteUser(user.id).subscribe(() => {
+            this.userService.createNewUser({
+              ...userForUpdate,
+              password: updated_user.password!,
+            });
+          });
+        } else
+          this.userService
+            .updateUser(userForUpdate, user.id)
+            .subscribe((userRes) => {
+              this.getUserData();
+            });
+      }
     });
   }
 

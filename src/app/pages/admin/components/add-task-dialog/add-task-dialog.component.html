@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Add Task</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+      @if (form.get('title')?.hasError('required')) {
+      <mat-error>
+        {{ APP_MESSAGES.FORM_ERRORS.required }}
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+      @if (form.get('description')?.hasError('required')) {
+      <mat-error>
+        {{ APP_MESSAGES.FORM_ERRORS.required }}
+      </mat-error>
+      }
+    </mat-form-field>
+    @if (userRole === 'admin') {
+    <mat-form-field>
+      <mat-select formControlName="userId" placeholder="User" #singleSelect>
+        <mat-option>
+          <ngx-mat-select-search
+            [formControl]="userFilterCtrl"
+          ></ngx-mat-select-search>
+        </mat-option>
+        @for (user of filteredUsers; track $index) {
+        <mat-option [value]="user.id">
+          {{ user.name }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-flat-button (click)="onSubmit()" cdkFocusInitial>Create</button>
+</mat-dialog-actions>

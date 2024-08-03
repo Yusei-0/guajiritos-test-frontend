@@ -51,7 +51,6 @@ import { passwordConfirmationValidator } from '@/helpers';
 export class AddUserDialogComponent {
   readonly dialogRef = inject(MatDialogRef<AddUserDialogComponent>);
   readonly fb = inject(FormBuilder);
-  // readonly data = inject<DialogData>(MAT_DIALOG_DATA);
   readonly animal = model('dog');
 
   roles = ROLES;

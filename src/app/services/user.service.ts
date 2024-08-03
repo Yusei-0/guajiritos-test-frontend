@@ -1,6 +1,14 @@
-import { AuthUser, CreateUserDTO, User, USER_DEFAULT } from '@/models';
+import {
+  AuthUser,
+  CreateUserDTO,
+  Role,
+  UpdateUserDto,
+  User,
+  USER_DEFAULT,
+} from '@/models';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -10,21 +18,40 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   http = inject(HttpClient);
 
-  private userSubject = new BehaviorSubject<User>(USER_DEFAULT);
+  private userSubject = new BehaviorSubject<User>(
+    this.isBrowser() && this.getUserFromLocalStorage()
+      ? (this.getUserFromLocalStorage() as User)
+      : USER_DEFAULT
+  );
   user$ = this.userSubject.asObservable();
 
-  constructor() {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
 
   setAuthUser(authUser: User) {
     this.userSubject.next(authUser);
+    if (this.isBrowser()) {
+      this.saveUserToLocalStorage(authUser);
+    }
   }
 
   getUserAuthenticated(): User {
     return this.userSubject.value;
   }
 
+  getUserRole(): Role {
+    return this.userSubject.value.role;
+  }
+
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(environment.urlServer + '/users');
+  }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(environment.urlServer + '/users/' + id);
   }
 
   createNewUser(newUser: CreateUserDTO): Observable<User> {
@@ -37,5 +64,24 @@ export class UserService {
     return this.http.delete<User>(environment.urlServer + '/users/' + id);
   }
 
-  updateUser(user: User) {}
+  updateUser(updateUser: UpdateUserDto, id: number): Observable<User> {
+    return this.http.patch<User>(environment.urlServer + '/users/' + id, {
+      ...updateUser,
+    });
+  }
+
+  private saveUserToLocalStorage(user: User): void {
+    localStorage.setItem('authUser', JSON.stringify(user));
+  }
+
+  private getUserFromLocalStorage(): User | null {
+    const userJson = localStorage.getItem('authUser');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
+  clearUserFromLocalStorage(): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem('authUser');
+    }
+  }
 }
