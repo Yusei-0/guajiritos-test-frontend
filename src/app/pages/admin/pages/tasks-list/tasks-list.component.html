@@ -6,12 +6,6 @@
 
   <div class="mat-elevation-z8 user_list--table-container">
     <table mat-table [dataSource]="taskDataSource()" matSort>
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
-      </ng-container>
-
       <!-- Progress Column -->
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
@@ -26,8 +20,41 @@
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+        <td mat-cell *matCellDef="let row">
+          <button
+            mat-button
+            [ngClass]="{
+              pending: row.status === 'pending',
+              'in-progress': row.status === 'in progress',
+              complete: row.status === 'complete'
+            }"
+            class="task_list--status-cell"
+            [matMenuTriggerFor]="taskstatus"
+          >
+            <strong class="task_list--status-cell-text">
+              {{ row.status | uppercase }}
+            </strong>
+            <mat-icon class="task_list--status-cell-icon">
+              radio_button_checked
+            </mat-icon>
+          </button>
+          <mat-menu #taskstatus="matMenu">
+            @for (status of TaskStatuses; track status) {
+            <button mat-menu-item (click)="updateTaksStatus(row, status)">
+              {{ status | uppercase }}
+            </button>
+            }
+          </mat-menu>
+        </td>
       </ng-container>
+      @if (currentUser.role === 'admin') {
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.userId | taskuser : users }}
+        </td>
+      </ng-container>
+      }
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>

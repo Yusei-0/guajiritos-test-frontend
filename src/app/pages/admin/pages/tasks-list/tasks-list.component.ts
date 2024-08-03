@@ -1,12 +1,15 @@
 import {
   NewTaskDto,
+  RoleOptions,
   Task,
+  TASK_STATUSES,
+  TaskStatus,
   TaskStatusOptions,
   User,
   USER_DEFAULT,
 } from '@/models';
 import { TaskService, UserService } from '@/services';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgClass, UpperCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,6 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -33,6 +37,7 @@ import { AddTaskDialogComponent } from '../../components/add-task-dialog/add-tas
 import { CloseCreateTaskDialogModel } from '../../models/create-task-dialog-model';
 import { title } from 'process';
 import { TaskForUserAdapter } from '@/adapters';
+import { TaskuserPipe } from '@/core';
 
 @Component({
   selector: 'tm-tasks-list',
@@ -40,6 +45,8 @@ import { TaskForUserAdapter } from '@/adapters';
   imports: [
     //core
     JsonPipe,
+    UpperCasePipe,
+    NgClass,
 
     //material
     MatFormFieldModule,
@@ -49,9 +56,11 @@ import { TaskForUserAdapter } from '@/adapters';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatMenuModule,
 
     //components
     FloatAddButtonComponent,
+    TaskuserPipe,
   ],
   templateUrl: './tasks-list.component.html',
   styleUrl: './tasks-list.component.scss',
@@ -60,26 +69,40 @@ import { TaskForUserAdapter } from '@/adapters';
 export class TasksListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
   taskService = inject(TaskService);
   dialog = inject(MatDialog);
-  taskSuscription!: Subscription;
   userService = inject(UserService);
+
+  taskSuscription!: Subscription;
   userSuscription!: Subscription;
+  getUsersSuscription!: Subscription;
+
+  users: User[] = [];
   currentUser: User = USER_DEFAULT;
+  TaskStatuses = TASK_STATUSES;
   data = signal<any>([]);
-  displayedColumns: string[] = [
-    'id',
-    'title',
-    'description',
-    'status',
-    'actions',
-  ];
+  displayedColumns: string[] = ['title', 'description', 'status', 'actions'];
   taskDataSource = signal<MatTableDataSource<Task>>(new MatTableDataSource());
   ngOnInit(): void {
     this.userSuscription = this.userService.user$.subscribe((data) => {
       this.currentUser = data;
       this.getTaskData();
     });
+
+    if (this.userService.getUserRole() === RoleOptions.ADMIN) {
+      this.getUsersSuscription = this.userService
+        .getAllUsers()
+        .subscribe((data) => (this.users = data));
+
+      this.displayedColumns = [
+        'title',
+        'description',
+        'status',
+        'user',
+        'actions',
+      ];
+    }
   }
   getTaskData() {
     this.taskSuscription = this.taskService.getAllTasks().subscribe((tasks) => {
@@ -101,6 +124,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
         name: task.title,
+        title: 'Task',
       },
     });
     dialogRef.afterClosed().subscribe((res) => {
@@ -118,9 +142,9 @@ export class TasksListComponent implements OnInit, OnDestroy {
       if (result !== undefined) {
         const newTask: NewTaskDto = {
           ...result,
-          status: TaskStatusOptions.TODO,
+          status: TaskStatusOptions.PENDING,
           userId:
-            this.currentUser.role === 'user'
+            this.currentUser.role === RoleOptions.USER
               ? this.currentUser.id
               : result.userId
               ? result.userId
@@ -133,6 +157,13 @@ export class TasksListComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  updateTaksStatus(task: Task, newStatus: TaskStatus) {
+    this.taskService.updateTaskStatus(task.id, newStatus).subscribe((data) => {
+      this.getTaskData();
+    });
+  }
+
   // openUpdateUserDialog(user: User): void {
   //   const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
   //     data: {
@@ -175,5 +206,9 @@ export class TasksListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSuscription.unsubscribe();
     this.taskSuscription.unsubscribe();
+
+    if (this.userService.getUserRole() === RoleOptions.ADMIN) {
+      this.getUsersSuscription.unsubscribe();
+    }
   }
 }

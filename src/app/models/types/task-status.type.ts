@@ -1,9 +1,13 @@
-export type TaskStatus = 'todo' | 'in-progress' | 'done';
+export type TaskStatus = 'pending' | 'in progress' | 'complete';
 
-export const TASK_STATUSES: TaskStatus[] = ['todo', 'in-progress', 'done'];
+export const TASK_STATUSES: TaskStatus[] = [
+  'pending',
+  'in progress',
+  'complete',
+];
 
 export enum TaskStatusOptions {
-  TODO = 'todo',
-  IN_PROGRESS = 'in-progress',
-  DONE = 'done',
+  PENDING = 'pending',
+  IN_PROGRESS = 'in progress',
+  COMPLETE = 'complete',
 }

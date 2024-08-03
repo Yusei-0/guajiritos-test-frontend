@@ -95,6 +95,7 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
         name: user.name,
+        title: 'User',
       },
     });
 

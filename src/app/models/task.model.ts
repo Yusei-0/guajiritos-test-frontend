@@ -12,6 +12,6 @@ export const TASK_DEFAULT: Task = {
   id: 0,
   title: '',
   description: '',
-  status: TaskStatusOptions.TODO,
+  status: TaskStatusOptions.PENDING,
   userId: 0,
 };

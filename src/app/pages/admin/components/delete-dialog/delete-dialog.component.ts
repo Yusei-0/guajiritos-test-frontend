@@ -5,6 +5,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { title } from 'process';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -16,6 +17,7 @@ import {
 
 export interface DeleteDialogData {
   name: string;
+  title?: string;
 }
 
 @Component({
@@ -36,6 +38,7 @@ export class DeleteDialogComponent {
   readonly dialogRef = inject(MatDialogRef<DeleteDialogComponent>);
   readonly data = inject<DeleteDialogData>(MAT_DIALOG_DATA);
   readonly name = signal(this.data.name);
+  readonly title = signal(this.data.title);
 
   cancel(): void {
     this.dialogRef.close(false);
