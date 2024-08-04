@@ -5,6 +5,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -29,6 +30,7 @@ import {
   CloseUpdateUserDialogData,
   UpdateUserDialogData,
 } from '../../models/update-user-dialog.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'tm-update-user-dialog',
@@ -41,6 +43,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
+    MatIconModule,
     MatButtonModule,
     MatSelectModule,
     MatDialogTitle,
@@ -61,6 +64,12 @@ export class UpdateUserDialogComponent implements OnInit {
   APP_MESSAGES = MESSAGES;
 
   form!: FormGroup;
+  hidePassword = signal(true);
+
+  showOrHidePassword(event: MouseEvent) {
+    event.stopPropagation();
+    this.hidePassword.set(!this.hidePassword());
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group(

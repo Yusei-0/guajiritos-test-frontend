@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -19,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MESSAGES } from '@/models';
 import { passwordConfirmationValidator } from '@/helpers';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface ResCloseChangePassword {
   oldPassword: string;
@@ -37,6 +43,8 @@ export interface ResCloseChangePassword {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatInputModule,
+    MatIconModule,
     MatSelectModule,
     MatDialogTitle,
     MatDialogContent,
@@ -64,6 +72,12 @@ export class ChangePasswordComponent {
     }
   );
 
+  hidePassword = signal(true);
+
+  showOrHidePassword(event: MouseEvent) {
+    event.stopPropagation();
+    this.hidePassword.set(!this.hidePassword());
+  }
   onSubmit() {
     if (!this.form.valid) return;
 

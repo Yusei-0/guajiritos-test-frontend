@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   model,
+  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -25,6 +26,7 @@ import {
 import { CreateUserDTO, MESSAGES, RoleOptions, ROLES } from '@/models';
 import { MatSelectModule } from '@angular/material/select';
 import { passwordConfirmationValidator } from '@/helpers';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'tm-add-user-dialog',
@@ -38,6 +40,7 @@ import { passwordConfirmationValidator } from '@/helpers';
     MatInputModule,
     FormsModule,
     MatButtonModule,
+    MatIconModule,
     MatSelectModule,
     MatDialogTitle,
     MatDialogContent,
@@ -67,6 +70,12 @@ export class AddUserDialogComponent {
     { validators: passwordConfirmationValidator('password', 'confirmPassword') }
   );
 
+  hidePassword = signal(true);
+
+  showOrHidePassword(event: MouseEvent) {
+    event.stopPropagation();
+    this.hidePassword.set(!this.hidePassword());
+  }
   checkFormValid() {
     return this.form.valid;
   }
