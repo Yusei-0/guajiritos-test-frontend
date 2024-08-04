@@ -70,6 +70,19 @@ export class UserService {
     });
   }
 
+  updatePassword(
+    password: string,
+    id: number
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      environment.urlServer + '/admin/change-password',
+      {
+        userId: id,
+        newPassword: password,
+      }
+    );
+  }
+
   private saveUserToLocalStorage(user: User): void {
     localStorage.setItem('authUser', JSON.stringify(user));
   }

@@ -1,4 +1,4 @@
-import { NewTaskDto, Task, TaskStatus } from '@/models';
+import { NewTaskDto, Task, TaskStatus, UpdateTaskDTO } from '@/models';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -33,6 +33,12 @@ export class TaskService {
   updateTaskStatus(id: number, newStatus: TaskStatus): Observable<Task> {
     return this.http.patch<Task>(environment.urlServer + '/tasks/' + id, {
       status: newStatus,
+    });
+  }
+
+  updateTask(id: number, updatedTask: UpdateTaskDTO): Observable<Task> {
+    return this.http.patch<Task>(environment.urlServer + '/tasks/' + id, {
+      ...updatedTask,
     });
   }
 }

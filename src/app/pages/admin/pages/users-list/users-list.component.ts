@@ -1,5 +1,5 @@
 import { CreateUserDTO, User } from '@/models';
-import { UserService } from '@/services';
+import { NotificationsService, UserService } from '@/services';
 import { JsonPipe } from '@angular/common';
 import {
   AfterViewInit,
@@ -58,6 +58,7 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userService = inject(UserService);
   dialog = inject(MatDialog);
+  notify = inject(NotificationsService);
 
   userSuscription!: Subscription;
 
@@ -140,19 +141,21 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
           role: updated_user.role,
         };
 
-        if (ther_is_password && updated_user.password) {
-          this.userService.deleteUser(user.id).subscribe(() => {
-            this.userService.createNewUser({
-              ...userForUpdate,
-              password: updated_user.password!,
-            });
+        this.userService
+          .updateUser(userForUpdate, user.id)
+          .subscribe((data) => {
+            console.log(data);
+
+            if (ther_is_password && updated_user.password) {
+              this.userService
+                .updatePassword(updated_user.password, user.id)
+                .subscribe((res) => {
+                  console.log(res);
+                  this.getUserData();
+                  this.notify.openSimpleSnackBar('Password changed succesfuly');
+                });
+            } else this.getUserData();
           });
-        } else
-          this.userService
-            .updateUser(userForUpdate, user.id)
-            .subscribe((userRes) => {
-              this.getUserData();
-            });
       }
     });
   }

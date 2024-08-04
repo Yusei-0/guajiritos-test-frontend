@@ -5,6 +5,7 @@ import {
   TASK_STATUSES,
   TaskStatus,
   TaskStatusOptions,
+  UpdateTaskDTO,
   User,
   USER_DEFAULT,
 } from '@/models';
@@ -32,12 +33,17 @@ import { Subscription } from 'rxjs';
 import {
   DeleteDialogComponent,
   FloatAddButtonComponent,
+  UpdateTaskDialogComponent,
 } from '../../components';
 import { AddTaskDialogComponent } from '../../components/add-task-dialog/add-task-dialog.component';
-import { CloseCreateTaskDialogModel } from '../../models/create-task-dialog-model';
+import {
+  CloseCreateTaskDialogModel,
+  CreateTaskDialogModel,
+} from '../../models/create-task-dialog-model';
 import { title } from 'process';
 import { TaskForUserAdapter } from '@/adapters';
 import { TaskuserPipe } from '@/core';
+import { CloseUpdateTaskDialogModel } from '../../models';
 
 @Component({
   selector: 'tm-tasks-list',
@@ -78,7 +84,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   userSuscription!: Subscription;
   getUsersSuscription!: Subscription;
 
-  users: User[] = [];
+  users = signal<User[]>([]);
   currentUser: User = USER_DEFAULT;
   TaskStatuses = TASK_STATUSES;
   data = signal<any>([]);
@@ -93,7 +99,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     if (this.userService.getUserRole() === RoleOptions.ADMIN) {
       this.getUsersSuscription = this.userService
         .getAllUsers()
-        .subscribe((data) => (this.users = data));
+        .subscribe((data) => this.users.set(data));
 
       this.displayedColumns = [
         'title',
@@ -136,7 +142,11 @@ export class TasksListComponent implements OnInit, OnDestroy {
     });
   }
   openCreateTaskDialog(): void {
-    const dialogRef = this.dialog.open(AddTaskDialogComponent, {});
+    const dialogRef = this.dialog.open(AddTaskDialogComponent, {
+      data: {
+        users: this.users(),
+      },
+    });
     dialogRef.afterClosed().subscribe((result: CloseCreateTaskDialogModel) => {
       console.log('The dialog was closed');
       if (result !== undefined) {
@@ -148,7 +158,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
               ? this.currentUser.id
               : result.userId
               ? result.userId
-              : -1,
+              : this.currentUser.id,
         };
 
         this.taskService.createNewTask(newTask).subscribe((task) => {
@@ -164,37 +174,37 @@ export class TasksListComponent implements OnInit, OnDestroy {
     });
   }
 
-  // openUpdateUserDialog(user: User): void {
-  //   const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
-  //     data: {
-  //       user,
-  //     },
-  //   });
-  //   dialogRef.afterClosed().subscribe((result: CloseUpdateUserDialogData) => {
-  //     if (result !== undefined) {
-  //       let userForUpdate: UpdateUserDto;
-  //       const { ther_is_password, updated_user } = result;
-  //       userForUpdate = {
-  //         name: updated_user.name,
-  //         email: updated_user.email,
-  //         role: updated_user.role,
-  //       };
-  //       if (ther_is_password && updated_user.password) {
-  //         this.userService.deleteUser(user.id).subscribe(() => {
-  //           this.userService.createNewUser({
-  //             ...userForUpdate,
-  //             password: updated_user.password!,
-  //           });
-  //         });
-  //       } else
-  //         this.userService
-  //           .updateUser(userForUpdate, user.id)
-  //           .subscribe((userRes) => {
-  //             this.getUserData();
-  //           });
-  //     }
-  //   });
-  // }
+  openUpdateTaskDialog(task: Task): void {
+    const dialogRef = this.dialog.open(UpdateTaskDialogComponent, {
+      data: {
+        users: this.users(),
+        taskToUpdate: {
+          title: task.title,
+          description: task.description,
+          userId: task.userId,
+        },
+      },
+    });
+    dialogRef.afterClosed().subscribe((result: CloseUpdateTaskDialogModel) => {
+      if (result !== undefined) {
+        const taskForUpdate: UpdateTaskDTO = {
+          ...result,
+          userId:
+            this.currentUser.role === RoleOptions.USER
+              ? this.currentUser.id
+              : result.userId
+              ? result.userId
+              : this.currentUser.id,
+        };
+
+        this.taskService
+          .updateTask(task.id, taskForUpdate)
+          .subscribe((data) => {
+            this.getTaskData();
+          });
+      }
+    });
+  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.taskDataSource().filter = filterValue.trim().toLowerCase();

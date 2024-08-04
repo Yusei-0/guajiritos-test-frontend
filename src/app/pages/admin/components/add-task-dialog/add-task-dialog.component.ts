@@ -6,6 +6,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import {
@@ -17,6 +18,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -27,7 +29,10 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { CloseCreateTaskDialogModel } from '../../models/create-task-dialog-model';
+import {
+  CloseCreateTaskDialogModel,
+  CreateTaskDialogModel,
+} from '../../models/create-task-dialog-model';
 import { NotificationsService, UserService } from '@/services';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -62,11 +67,12 @@ export class AddTaskDialogComponent
   readonly fb = inject(FormBuilder);
   readonly userService = inject(UserService);
   readonly notify = inject(NotificationsService);
+  readonly data = inject<CreateTaskDialogModel>(MAT_DIALOG_DATA);
 
   userSubscription!: Subscription;
   taskStatus = TASK_STATUSES;
   APP_MESSAGES = MESSAGES;
-  users: User[] = [];
+  users = signal<User[]>([]);
   filteredUsers: User[] = [];
 
   form = this.fb.group({
@@ -91,17 +97,13 @@ export class AddTaskDialogComponent
     console.log('User role:', this.userRole);
 
     if (this.userRole === RoleOptions.ADMIN) {
-      this.userSubscription = this.userService
-        .getAllUsers()
-        .subscribe((data) => {
-          this.users = data;
-          this.filteredUsers = this.users.slice();
+      this.users.set(this.data.users);
+      this.filteredUsers = this.users().slice();
 
-          this.userFilterCtrl.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-              this.filterUsers();
-            });
+      this.userFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          this.filterUsers();
         });
     }
   }
@@ -137,7 +139,7 @@ export class AddTaskDialogComponent
   }
 
   protected setInitialValue() {
-    this.filteredUsers = this.users.slice();
+    this.filteredUsers = this.users().slice();
   }
 
   protected filterUsers() {
@@ -147,19 +149,18 @@ export class AddTaskDialogComponent
 
     let search = this.userFilterCtrl.value;
     if (!search) {
-      this.filteredUsers = this.users.slice();
+      this.filteredUsers = this.users().slice();
       return;
     } else {
       search = search.toLowerCase();
     }
 
-    this.filteredUsers = this.users.filter((user) =>
+    this.filteredUsers = this.users().filter((user) =>
       user.name.toLowerCase().includes(search)
     );
   }
 
   ngOnDestroy(): void {
-    if (this.userRole === 'admin') this.userSubscription.unsubscribe();
     this._onDestroy.next();
     this._onDestroy.complete();
   }
