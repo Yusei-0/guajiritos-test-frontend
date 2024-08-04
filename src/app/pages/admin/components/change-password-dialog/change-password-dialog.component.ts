@@ -1,11 +1,7 @@
+import { MESSAGES } from '@/models';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -13,12 +9,9 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { passwordConfirmationValidator } from '@/helpers';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { MESSAGES } from '@/models';
 
 @Component({
   selector: 'tm-change-password-dialog',
@@ -48,16 +41,16 @@ export class ChangePasswordDialogComponent {
 
   APP_MESSAGES = MESSAGES;
 
-  form = this.fb.group(
-    {
-      oldPassword: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: [''],
-    }
-    // {
-    //   validators: passwordConfirmationValidator('password', 'confirmPassword'),
-    // }
-  );
+  // form = this.fb.group(
+  //   {
+  //     oldPassword: ['', [Validators.required]],
+  //     password: ['', [Validators.required, Validators.minLength(6)]],
+  //     confirmPassword: [''],
+  //   }
+  //   // {
+  //   //   validators: passwordConfirmationValidator('password', 'confirmPassword'),
+  //   // }
+  // );
   onSubmit() {
     // if (!this.checkFormValid()) return;
     // let resCloseUpdateDialog: CloseUpdateUserDialogData;

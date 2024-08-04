@@ -65,7 +65,7 @@
         {{ currentUser.name | uppercase }}
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="openChangePasswordDialog()">
           <mat-icon>key</mat-icon>
           Change Password
         </button>

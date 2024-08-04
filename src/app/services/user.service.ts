@@ -83,6 +83,21 @@ export class UserService {
     );
   }
 
+  changePassworForUser(
+    userId: number,
+    oldPassword: string,
+    newPassword: string
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      environment.urlServer + '/change-password',
+      {
+        userId,
+        oldPassword,
+        newPassword,
+      }
+    );
+  }
+
   private saveUserToLocalStorage(user: User): void {
     localStorage.setItem('authUser', JSON.stringify(user));
   }

@@ -11,12 +11,17 @@ import { map, shareReplay } from 'rxjs/operators';
 import { AppTitleComponent } from '@/components';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ADMIN_ROUTES } from './models/routes-admin.model';
-import { AuthService, UserService } from '@/services';
+import { AuthService, NotificationsService, UserService } from '@/services';
 import { JustForAdminDirective } from '@/core';
 import { User, USER_DEFAULT } from '@/models';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ChangePasswordDialogComponent } from './components';
+import {
+  ChangePasswordComponent,
+  ChangePasswordDialogComponent,
+  ResCloseChangePassword,
+} from './components';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin',
@@ -30,6 +35,8 @@ import { ChangePasswordDialogComponent } from './components';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
+    FormsModule,
+    ReactiveFormsModule,
 
     //material
     MatToolbarModule,
@@ -52,6 +59,7 @@ export class AdminComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private dialog = inject(MatDialog);
+  private notify = inject(NotificationsService);
 
   userSuscription!: Subscription;
 
@@ -73,10 +81,17 @@ export class AdminComponent implements OnInit {
     );
 
   openChangePasswordDialog() {
-    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {});
-    // dialogRef.afterClosed().subscribe((res) => {
-    //   console.log('close');
-    // });
+    const dialogRef = this.dialog.open(ChangePasswordComponent, {});
+
+    dialogRef.afterClosed().subscribe((res: ResCloseChangePassword) => {
+      const { newPassword, oldPassword } = res;
+      this.userService
+        .changePassworForUser(this.currentUser.id, oldPassword, newPassword)
+        .subscribe((message) => {
+          console.log(message);
+          this.notify.openSimpleSnackBar('Password updated successfully');
+        });
+    });
   }
 
   logout() {
