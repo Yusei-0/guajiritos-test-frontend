@@ -1,5 +1,10 @@
+import { MESSAGES } from '@/models';
 import { NotificationsService } from '@/services';
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpInterceptorFn,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 
@@ -21,33 +26,28 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
         // Lógica adicional para errores específicos
         switch (error.status) {
-          case 400:
-            errorMessage =
-              error.error || 'Bad Request: Please check your input.';
-            console.error('Bad Request:', errorMessage);
+          case HttpStatusCode.BadRequest:
+            errorMessage = error.error || MESSAGES.ERROR_HTTP[400];
             break;
-          case 401:
-            errorMessage = 'Unauthorized: Please log in again.';
-            console.error('Unauthorized: Please log in again.');
+          case HttpStatusCode.Unauthorized:
+            errorMessage = MESSAGES.ERROR_HTTP[401];
             break;
-          case 403:
-            errorMessage = 'Forbidden: You do not have access.';
-            console.error('Forbidden: You do not have access.');
+          case HttpStatusCode.Forbidden:
+            errorMessage = MESSAGES.ERROR_HTTP[403];
             break;
-          case 404:
-            errorMessage = 'Not Found: The resource was not found.';
-            console.error('Not Found: The resource was not found.');
+          case HttpStatusCode.NotFound:
+            errorMessage = MESSAGES.ERROR_HTTP[404];
             break;
-          case 500:
-            errorMessage = 'Internal Server Error: Please try again later.';
-            console.error('Internal Server Error: Please try again later.');
+          case HttpStatusCode.InternalServerError:
+            errorMessage = MESSAGES.ERROR_HTTP[500];
             break;
           default:
-            errorMessage = 'An unknown error occurred.';
-            console.error('An unknown error occurred.');
+            errorMessage = MESSAGES.ERROR_HTTP.default;
             break;
         }
       }
+
+      console.log(errorMessage);
 
       notificationService.openSimpleSnackBar(errorMessage);
       return throwError(() => new Error(errorMessage));

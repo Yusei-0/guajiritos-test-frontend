@@ -1,0 +1,15 @@
+<div
+  class="card-wrapper"
+  [ngStyle]="
+{
+  'width' : widthInRem ? widthInRem+'rem' : 'auto',
+}
+"
+>
+  <ng-content select="card-header" class="card-header"></ng-content>
+  <ng-content select="card-body" class="card-body"></ng-content>
+  <ng-content></ng-content>
+  <div class="card-actions">
+    <ng-content select="card-actions" class="card-actions"></ng-content>
+  </div>
+</div>
