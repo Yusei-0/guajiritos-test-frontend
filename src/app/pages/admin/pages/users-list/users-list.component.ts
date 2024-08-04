@@ -152,7 +152,9 @@ export class UsersListComponent implements OnInit, AfterViewInit, OnDestroy {
                 .subscribe((res) => {
                   console.log(res);
                   this.getUserData();
-                  this.notify.openSimpleSnackBar('Password changed succesfuly');
+                  this.notify.openSimpleSnackBar(
+                    'Password changed successfully'
+                  );
                 });
             } else this.getUserData();
           });
