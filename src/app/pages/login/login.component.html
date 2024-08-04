@@ -9,7 +9,11 @@
           <tm-title> Welcome back. Sign into your account </tm-title>
         </mat-card-header>
         <mat-card-content>
-          <form [formGroup]="formLogin" (submit)="login()">
+          <form
+            [formGroup]="formLogin"
+            (submit)="login()"
+            (keydown.enter)="login()"
+          >
             <mat-form-field
               appearance="outline"
               class="card_form--input card_form--input-name"

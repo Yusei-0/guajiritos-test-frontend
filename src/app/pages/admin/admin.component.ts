@@ -84,13 +84,15 @@ export class AdminComponent implements OnInit {
     const dialogRef = this.dialog.open(ChangePasswordComponent, {});
 
     dialogRef.afterClosed().subscribe((res: ResCloseChangePassword) => {
-      const { newPassword, oldPassword } = res;
-      this.userService
-        .changePassworForUser(this.currentUser.id, oldPassword, newPassword)
-        .subscribe((message) => {
-          console.log(message);
-          this.notify.openSimpleSnackBar('Password updated successfully');
-        });
+      if (res !== undefined) {
+        const { newPassword, oldPassword } = res;
+        this.userService
+          .changePassworForUser(this.currentUser.id, oldPassword, newPassword)
+          .subscribe((message) => {
+            console.log(message);
+            this.notify.openSimpleSnackBar('Password updated successfully');
+          });
+      }
     });
   }
 
